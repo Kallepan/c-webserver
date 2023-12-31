@@ -2,13 +2,13 @@
 CXX = g++
 
 # Specify the target
-TARGET = build/server
+TARGET = build/main
 
 # Specify the source files
-SRC = src/server.cc
+SRC = src/*.cc
 
 # Specify the compiler flags
-CXXFLAGS = -Wall -std=c++11
+CXXFLAGS = -Wall -std=c++11 -I include
 
 # Default target
 all: $(TARGET)
