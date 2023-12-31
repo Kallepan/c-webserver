@@ -16,4 +16,5 @@ $ ./build/server
 
 ## Features
 
-- [ ] HTTP/1.1
+- [x] HTTP/1.1
+- [x] GET method
