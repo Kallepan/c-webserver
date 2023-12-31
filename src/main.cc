@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <algorithm>
 #include <vector>
+#include "router.hh"
 
 #define PORT 8080
 
@@ -50,41 +51,6 @@ int addContent(std::string &input, std::string content)
     return 0;
 }
 
-int parseBuffer(std::string &buffer, std::string &path)
-{
-    /**
-     * @brief Parse the buffer to extract the GET request, we ignore the rest
-     * @return error code
-     */
-
-    // find GET request
-    std::size_t found = buffer.find("GET");
-    if (found == std::string::npos)
-    {
-        std::cout << "No GET request found\n";
-        return 1;
-    }
-
-    // find end of GET request
-    found = buffer.find("HTTP/1.1");
-    if (found == std::string::npos)
-    {
-        std::cout << "No end of GET request found\n";
-        return 1;
-    }
-
-    // extract GET request
-    path = buffer.substr(4, found - 5);
-
-    // if path is empty, set to index.html
-    if (path == "" || path == "/")
-    {
-        path = "/index.html";
-    }
-
-    return 0;
-}
-
 int main()
 {
     int server_fd, new_socket;
@@ -113,6 +79,11 @@ int main()
     {
         throw std::runtime_error("listen");
     }
+
+    // initialize router
+    Router router;
+    router = Router();
+
     while (true)
     {
         std::cout << "\n+++++++ Waiting for new connection ++++++++\n\n";
@@ -128,10 +99,10 @@ int main()
 
         // Parse buffer and get GET request
         std::string path;
-        parseBuffer(buffer, path);
+        router.translateFromBufferToPath(buffer, path);
 
         // using the path, get the content
-        std::ifstream file("../res" + path);
+        std::ifstream file("res/" + path);
         if (!file)
         {
 
