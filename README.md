@@ -11,7 +11,7 @@ This is a simple HTTP/1.1 server written in C++. This is definitely not a produc
 $ make
 
 # Launch the server
-$ ./build/server
+$ ./build/main
 ```
 
 ## Features
