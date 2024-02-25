@@ -17,15 +17,18 @@
 			"extensions": [
 				"ms-vscode.cpptools",
 				"ms-vscode.cpptools-extension-pack",
-                "GitHub.copilot",
+				"GitHub.copilot",
 				"GitHub.copilot-chat",
 				"twxs.cmake",
 				"ms-vscode.cmake-tools",
 				"ms-azuretools.vscode-docker",
-                "DavidAnson.vscode-markdownlint"
+				"DavidAnson.vscode-markdownlint",
+				"xaver.clang-format"
 			],
 			"settings": {
-				"cmake.configureOnOpen": true
+				"cmake.configureOnOpen": true,
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "xaver.clang-format"	
 			}
 		}
 	}

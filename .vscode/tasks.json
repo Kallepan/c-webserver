@@ -6,6 +6,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
+                "-pthread",
                 "-g",
                 "${workspaceFolder}/src/main.cc",
                 "${workspaceFolder}/src/router.cc",
