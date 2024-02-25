@@ -34,10 +34,6 @@ void Router::cleanPath(const std::string &path) const {
   }
 };
 
-bool Router::fileExists(const std::string &file_path) const {
-  return std::filesystem::exists(file_path);
-};
-
 void Router::decodeRequestedPathToFilePath(std::string &path) const {
   // TODO: Implement a better way to decode the requested path to a file path
   if (path == "/" || path.empty()) {

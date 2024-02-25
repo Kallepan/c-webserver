@@ -1,6 +1,3 @@
-// Router header file
-#pragma once
-
 #ifndef ROUTER_HH
 #define ROUTER_HH
 #include "http_errors.hh"
@@ -32,7 +29,9 @@ public:
    *
    * This function checks if a file exists in the file system
    */
-  bool fileExists(const std::string &file_path) const;
+  bool fileExists(const std::string &file_path) const {
+    return std::filesystem::exists(file_path);
+  };
 
 private:
   /**

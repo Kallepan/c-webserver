@@ -1,8 +1,7 @@
-#pragma once
-
 #ifndef RESPONSE_HH
 #define RESPONSE_HH
 #include <iostream>
+#include <memory>
 #include <string>
 
 /**
@@ -18,8 +17,10 @@ private:
   std::string content;
 
 public:
+#ifdef DEBUG
   Response() { std::cout << "Response object created\n"; }
   ~Response() { std::cout << "Response object destroyed\n"; }
+#endif
 
   void printResponse() {
 #ifdef DEBUG
@@ -31,22 +32,22 @@ public:
 
   std::string getResponse() const {
     std::string response = "";
-    response += "HTTP/1.1 " + std::to_string(this->status_code) + " " +
-                this->status_message + "\n";
-    response += "Content-Type: " + this->content_type + "\n";
-    response += "Content-Length: " + std::to_string(this->content_length) +
+    response +=
+        "HTTP/1.1 " + std::to_string(status_code) + " " + status_message + "\n";
+    response += "Content-Type: " + content_type + "\n";
+    response += "Content-Length: " + std::to_string(content_length) +
                 "\n\n"; // note the double line feed (RFC 2616 requires this)
-    response += this->content;
+    response += content;
     return response;
   }
 
   void setData(int status_code, std::string status_message,
                std::string content_type, std::string content) {
     this->status_code = status_code;
-    this->status_message = status_message;
-    this->content_type = content_type;
-    this->content = content;
-    this->content_length = content.length();
+    this->status_message = std::move(status_message);
+    this->content_type = std::move(content_type);
+    this->content = std::move(content);
+    this->content_length = this->content.length();
   }
 };
 
@@ -55,20 +56,20 @@ public:
  */
 class ResponseBuilder {
 private:
-  Response *response;
+  std::unique_ptr<Response> response;
 
 public:
-  ResponseBuilder() { this->response = new Response(); }
-  ~ResponseBuilder() { delete response; }
+  ResponseBuilder() : response(std::make_unique<Response>()){};
 
   void setData(int status_code, std::string status_message,
                std::string content_type, std::string content) {
-    this->response->setData(status_code, status_message, content_type, content);
+    this->response->setData(status_code, std::move(status_message),
+                            std::move(content_type), std::move(content));
   }
 
-  std::string getResponse() const { return this->response->getResponse(); }
+  std::string getResponse() const { return response->getResponse(); }
 
-  void printResponse() { this->response->printResponse(); }
+  void printResponse() { response->printResponse(); }
 };
 
 #endif // RESPONSE_HH

@@ -1,5 +1,3 @@
-#pragma once
-#include <iostream>
 #include <stdexcept>
 #include <string>
 
@@ -7,15 +5,10 @@
 #define HTTP_ERRORS_HH
 namespace http_error {
 class HTTPError : public std::runtime_error {
-private:
-  std::string error;
-
 public:
-  explicit HTTPError(const std::string &error) : std::runtime_error(error) {
-    this->error = error;
-  }
+  explicit HTTPError(const std::string &error) : std::runtime_error(error){};
 
-  std::string getError() { return this->error; }
+  std::string getError() const { return this->what(); }
 
   // Pure virtual functions
   virtual std::string
