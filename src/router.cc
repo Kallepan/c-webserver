@@ -7,7 +7,8 @@ const std::vector<std::string> forbiddenSubstrings = {"..", "//", "~"};
 const int GET_REQUEST_OFFSET = 4;
 const int HTTP_VERSION_OFFSET = 5;
 
-void Router::translateFromBufferToPath(std::string &buffer, std::string &path) {
+void Router::translateFromBufferToPath(std::string &buffer,
+                                       std::string &path) const {
   std::size_t found = buffer.find(GET_REQUEST);
 
   if (found == std::string::npos) {
@@ -24,7 +25,7 @@ void Router::translateFromBufferToPath(std::string &buffer, std::string &path) {
   this->cleanPath(path);
 };
 
-void Router::cleanPath(std::string &path) {
+void Router::cleanPath(const std::string &path) const {
   for (const auto &forbiddenSubstring : forbiddenSubstrings) {
     if (path.find(forbiddenSubstring) != std::string::npos) {
       std::cout << "Directory traversal detected\n";
@@ -33,13 +34,16 @@ void Router::cleanPath(std::string &path) {
   }
 };
 
-void Router::decodeRequestedPathToFilePath(std::string &path) {
+bool Router::fileExists(const std::string &file_path) const {
+  return std::filesystem::exists(file_path);
+};
+
+void Router::decodeRequestedPathToFilePath(std::string &path) const {
   // TODO: Implement a better way to decode the requested path to a file path
-  if (path == "/" || path == "") {
+  if (path == "/" || path.empty()) {
     path = RES_DIR + "index.html";
     return;
   }
 
   throw http_error::NotFoundError();
-  // path = RES_DIR + path;
 };

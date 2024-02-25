@@ -4,7 +4,7 @@
 #ifndef ROUTER_HH
 #define ROUTER_HH
 #include "http_errors.hh"
-#include <fstream>
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,35 +12,33 @@
 class Router {
 public:
   /**
-   * @brief Constructor
+   * @brief Translate the buffer from the request to a cleanedPath
    *
-   * This constructor initializes the router with the given port.
-   *
-   * @param port The port to listen on
+   * This function provides a way to access the requested path from a buffer
+   * and clean it from forbidden substrings
    */
-  Router(){};
+  void translateFromBufferToPath(std::string &buffer, std::string &path) const;
 
   /**
-   * @brief Destructor
+   * @brief Decode the requested path to a file path
    *
-   * This destructor destroys the router.
+   * This function takes a cleand path requested from the server and
+   * returns the underlying file path to be served
    */
-  ~Router(){};
+  void decodeRequestedPathToFilePath(std::string &path) const;
 
   /**
-   * @brief Translate the given path
+   * @brief Check if a file exists
    *
-   * This function translates the given path to the correct file.
+   * This function checks if a file exists in the file system
    */
-  void translateFromBufferToPath(std::string &buffer, std::string &path);
-  void decodeRequestedPathToFilePath(std::string &path);
-  bool fileExists(const std::string &file_path) {
-    std::ifstream file(file_path);
-    return file.good();
-  }
+  bool fileExists(const std::string &file_path) const;
 
 private:
-  void cleanPath(std::string &path);
+  /**
+   * @brief Clean the path from forbidden substrings
+   */
+  void cleanPath(const std::string &path) const;
 };
 
 #endif // ROUTER_HH
