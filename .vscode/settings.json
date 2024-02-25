@@ -52,6 +52,13 @@
         "ratio": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "codecvt": "cpp",
+        "condition_variable": "cpp",
+        "future": "cpp",
+        "iomanip": "cpp",
+        "mutex": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp"
     }
 }

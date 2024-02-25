@@ -22,14 +22,6 @@ public:
   ~Response() { std::cout << "Response object destroyed\n"; }
 #endif
 
-  void printResponse() {
-#ifdef DEBUG
-    std::cout << this->getResponse() << "\n";
-#else
-    std::cout << "Response set\n";
-#endif
-  };
-
   std::string getResponse() const {
     std::string response = "";
     response +=
@@ -68,8 +60,6 @@ public:
   }
 
   std::string getResponse() const { return response->getResponse(); }
-
-  void printResponse() { response->printResponse(); }
 };
 
 #endif // RESPONSE_HH

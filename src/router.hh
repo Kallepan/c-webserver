@@ -1,10 +1,12 @@
 #ifndef ROUTER_HH
 #define ROUTER_HH
-#include "http_errors.hh"
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <vector>
+
+const std::vector<std::string> forbiddenSubstrings = {"..", "//", "~"};
 
 class Router {
 public:
@@ -14,16 +16,10 @@ public:
    * This function provides a way to access the requested path from a buffer
    * and clean it from forbidden substrings
    */
-  void translateFromBufferToPath(std::string &buffer, std::string &path) const;
+  std::optional<std::string>
+  translateFromBufferToPath(std::string &buffer) const;
 
-  /**
-   * @brief Decode the requested path to a file path
-   *
-   * This function takes a cleand path requested from the server and
-   * returns the underlying file path to be served
-   */
-  void decodeRequestedPathToFilePath(std::string &path) const;
-
+private:
   /**
    * @brief Check if a file exists
    *
@@ -32,12 +28,19 @@ public:
   bool fileExists(const std::string &file_path) const {
     return std::filesystem::exists(file_path);
   };
-
-private:
   /**
    * @brief Clean the path from forbidden substrings
    */
-  void cleanPath(const std::string &path) const;
+  bool isValidPath(const std::string &path) const {
+    for (const auto &forbiddenSubstring : forbiddenSubstrings) {
+      if (path.find(forbiddenSubstring) != std::string::npos) {
+        std::cout << "Directory traversal detected\n";
+        return false;
+      }
+    }
+
+    return true;
+  };
 };
 
 #endif // ROUTER_HH
